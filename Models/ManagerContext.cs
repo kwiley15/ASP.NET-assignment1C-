@@ -27,7 +27,7 @@ namespace assignment1C_.Models
 					LastName = "Starseeker",
 					PhoneNumber = "1234567890",
 					Email = "elara.starseeker@stellarnet.com ",
-					CategoryId = 1,
+					CategoryId = 2,
 					Organization = "Stellar Explorations"
 				},
 				new Manager
