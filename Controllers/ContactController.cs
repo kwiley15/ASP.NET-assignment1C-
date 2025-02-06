@@ -1,21 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using assignment1C_.Controllers;
+using assignment1C_.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace assignment1C_.Controllers
+namespace assignment1C_.Models
 {
     public class ContactController : Controller
     {
         private readonly ApplicationDBcontext _context;
 
+       
+        
         public ContactController(ApplicationDBcontext context)
         {
             _context = context;
         }
 
 
-        public async Task<IActionResult> index ()
+        public async Task<IActionResult> Index()
         {
-            var contact = await context.manager.Include(c  => c.Category).ToListAsync();
+            var contact = await _context.Manager.Include(c => c.CategoryId).ToListAsync();
+
             return View(contact);
 
 
@@ -23,9 +29,9 @@ namespace assignment1C_.Controllers
 
         }
 
-        public async Task<IActionResult> details (int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var contact = await _context.manager.Include(c => c.Category).FristorDelfaultAsynce(c => c.contactId == id);
+            var contact = await _context.Manager.Include(c => c.CategoryId).FirstOrDefaultAsync(c => c.ContactId == id);
             if (contact == null) return NotFound();
             return View(contact);
 
@@ -36,9 +42,9 @@ namespace assignment1C_.Controllers
         {
             if (id == null)
             {
-                return View(new manager());
+                return View(new Manager());
             }
-            var contact = await _context.manager.FindAsync(id);
+            var contact = await _context.Manager.FindAsync(id);
             if (contact == null) return NotFound();
 
             return View(contact);
@@ -46,7 +52,7 @@ namespace assignment1C_.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> upsert (manager contact)
+        public async Task<IActionResult> upsert (Manager contact)
         {
 
             if (!ModelState.IsValid)
@@ -54,14 +60,14 @@ namespace assignment1C_.Controllers
                 return View(contact);
             }
 
-            if (contact.contactId == 0)
+            if (contact.ContactId == 0)
             {
-                _context.manager.Add(contact);
+                _context.Manager.Add(contact);
             }
 
             else
             { 
-                _context.manager.update(contact);
+                _context.Manager.Update(contact);
             }
 
 
@@ -74,7 +80,7 @@ namespace assignment1C_.Controllers
 
         public async Task<IActionResult> delete(int id)
         {
-            var contact == await _context.manager.Findasync(id);
+            var contact = await _context.Manager.FindAsync(id);
 
             if (contact == null) return NotFound();
 
@@ -87,11 +93,11 @@ namespace assignment1C_.Controllers
         [HttpPost]
         public async Task<IActionResult> deleteConfirmed (int id)
         {
-            var contact = await _context.manager.Findasync(id);
+            var contact = await _context.Manager.FindAsync(id);
             if (contact == null) return NotFound(); 
 
-            _context.manager.Remove(contact);
-            await _context.SavechangesAsync();
+            _context.Manager.Remove(contact);
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
 
 

@@ -14,6 +14,7 @@ namespace assignment1C_.Models
 			modelBuilder.Entity<Manager>().HasData(
 				new Manager
 				{
+					ContactId = 1,
 					FirstName = "Juan",
 					LastName = "Guerro",
 					PhoneNumber = "1234567890",
@@ -23,6 +24,7 @@ namespace assignment1C_.Models
 				},
 				new Manager
 				{
+					ContactId = 2,
 					FirstName = "Elara",
 					LastName = "Starseeker",
 					PhoneNumber = "1234567890",
@@ -32,6 +34,7 @@ namespace assignment1C_.Models
 				},
 				new Manager
 				{
+					ContactId = 3,
 					FirstName = "Cassia",
 					LastName = "Moonshade",
 					PhoneNumber = "7788990011",
@@ -41,6 +44,7 @@ namespace assignment1C_.Models
 				},
 				new Manager
 				{
+					ContactId = 4,
 					FirstName = "Thorne",
 					LastName = "Blackthorn",
 					PhoneNumber = "9988776655",
@@ -50,6 +54,7 @@ namespace assignment1C_.Models
 				},
 				new Manager
 				{
+					ContactId = 5,
 					FirstName = "Mira",
 					LastName = "Luminaris",
 					PhoneNumber = "1122334455",
