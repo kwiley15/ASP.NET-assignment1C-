@@ -11,8 +11,8 @@ using assignment1C_.Models;
 namespace assignment1C_.Migrations
 {
     [DbContext(typeof(ManagerContext))]
-    [Migration("20250206092134_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250206223201_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
