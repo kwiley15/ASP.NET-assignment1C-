@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using assignment1C_.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace assignment1C_.Controllers
 {
@@ -22,7 +23,7 @@ namespace assignment1C_.Controllers
             return View(contacts);
         }
 
-        public IActionResult Privacy()
+		public IActionResult Privacy()
         {
             return View();
         }
