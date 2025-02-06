@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 namespace assignment1C_.Models
 {
 	public class ManagerContext : DbContext
@@ -7,12 +6,12 @@ namespace assignment1C_.Models
 		public ManagerContext(DbContextOptions<ManagerContext> options)
 			: base(options) 
 		{ }
-		public DbSet<Manager> Managers { get; set; }
+		public DbSet<Contact> Contacts { get; set; }
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
-			modelBuilder.Entity<Manager>().HasData(
-				new Manager
+			modelBuilder.Entity<Contact>().HasData(
+				new Contact
 				{
 					ContactId = 1,
 					FirstName = "Juan",
@@ -22,7 +21,7 @@ namespace assignment1C_.Models
 					CategoryId = 1,
 					Organization = "RDP"
 				},
-				new Manager
+				new Contact
 				{
 					ContactId = 2,
 					FirstName = "Elara",
@@ -32,7 +31,7 @@ namespace assignment1C_.Models
 					CategoryId = 2,
 					Organization = "Stellar Explorations"
 				},
-				new Manager
+				new Contact
 				{
 					ContactId = 3,
 					FirstName = "Cassia",
@@ -42,7 +41,7 @@ namespace assignment1C_.Models
 					CategoryId = 5,
 					Organization = "Celestial Archives"
 				},
-				new Manager
+				new Contact
 				{
 					ContactId = 4,
 					FirstName = "Thorne",
@@ -52,7 +51,7 @@ namespace assignment1C_.Models
 					CategoryId = 4,
 					Organization = "Shadowbound Guild"
 				},
-				new Manager
+				new Contact
 				{
 					ContactId = 5,
 					FirstName = "Mira",
@@ -62,7 +61,7 @@ namespace assignment1C_.Models
 					CategoryId = 3,
 					Organization = "Weavers of Dawn"
 				}
-				);
+			);
 		}
 
 	}

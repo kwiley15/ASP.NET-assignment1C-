@@ -1,18 +1,15 @@
-﻿@model assignment1C_.Models.Manager
-@{
-    ViewBag.Title = Model.ContactId == 0 ? "Add Contact" : "Edit Contact";
-}
+﻿@model assignment1C_.Models.Contact
 
-<h2>@ViewBag.Title</h2>
+<h1>Create New Contact</h1>
 
 <form asp-action="Upsert" method="post">
     <input type="hidden" asp-for="ContactId" />
     <div class="form-group">
-        <label asp-for="FirstName">Frist Name</label>
+        <label asp-for="FirstName">First Name</label>
         <input asp-for="FirstName" class="form-control" />
     </div>
     <div class="form-group">
-        <label asp-for="LastName"> Last Name</label>
+        <label asp-for="LastName">Last Name</label>
         <input asp-for="LastName" class="form-control" />
     </div>
     <div class="form-group">
@@ -24,11 +21,14 @@
         <input asp-for="Email" class="form-control" />
     </div>
     <div class="form-group">
-        <label>Category</label>
-        <select asp-for="CategoryId" asp-items="@(new SelectList(ViewBag.Categories, "CategoryId", "Name"))" class="form-control">
-            <option value="0">Select a Category</option>
-        </select>
+        <label asp-for="CategoryId">Category Id</label>
+        <input asp-for="CategoryId" class="form-control" type="number" min="1" />
     </div>
+    <div class="form-group">
+        <label asp-for="Organization">Organization</label>
+        <input asp-for="Organization" class="form-control" />
+    </div>
+
     <button type="submit" class="btn btn-success">Save</button>
     <a class="btn btn-secondary" asp-action="Index">Cancel</a>
 </form>

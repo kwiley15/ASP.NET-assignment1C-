@@ -3,109 +3,179 @@ using assignment1C_.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Diagnostics;
 
-namespace assignment1C_.Models
+namespace assignment1C_.Controllers
 {
     public class ContactController : Controller
     {
-        private readonly ApplicationDBcontext _context;
+        private readonly ManagerContext _context;
 
-       
-        
-        public ContactController(ApplicationDBcontext context)
+        public ContactController(ManagerContext context)
         {
             _context = context;
         }
 
-
+       
         public async Task<IActionResult> Index()
         {
-            var contact = await _context.Manager.Include(c => c.CategoryId).ToListAsync();
+            var contacts = await _context.Contacts.ToListAsync();
 
-            return View(contact);
+            
 
-
-
-
+            return View(contacts);
         }
 
-        public async Task<IActionResult> Details(int id)
-        {
-            var contact = await _context.Manager.Include(c => c.CategoryId).FirstOrDefaultAsync(c => c.ContactId == id);
-            if (contact == null) return NotFound();
-            return View(contact);
-
-        }
-
-
-        public async Task<IActionResult> upsert (int? id)
+        
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
-                return View(new Manager());
+                return NotFound();
             }
-            var contact = await _context.Manager.FindAsync(id);
-            if (contact == null) return NotFound();
+
+            var contact = await _context.Contacts
+                .FirstOrDefaultAsync(m => m.ContactId == id);
+            if (contact == null)
+            {
+                return NotFound();
+            }
 
             return View(contact);
-
         }
 
-        [HttpGet]
-        public async Task<IActionResult> upsert (Manager contact)
+      
+        public IActionResult Create()
         {
+            return View();
+        }
 
-            if (!ModelState.IsValid)
+       
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("ContactId,FirstName,LastName,PhoneNumber,Email,CategoryId,Organization")] Contact contact)
+        {
+            if (ModelState.IsValid)
             {
-                return View(contact);
+                _context.Add(contact);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
+            return View(contact);
+        }
 
-            if (contact.ContactId == 0)
+        
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
             {
-                _context.Manager.Add(contact);
+                return NotFound();
             }
 
-            else
-            { 
-                _context.Manager.Update(contact);
+            var contact = await _context.Contacts.FindAsync(id);
+            if (contact == null)
+            {
+                return NotFound();
+            }
+            return View(contact);
+        }
+
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("ContactId,FirstName,LastName,PhoneNumber,Email,CategoryId,Organization")] Contact contact)
+        {
+            if (id != contact.ContactId)
+            {
+                return NotFound();
             }
 
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(contact);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ContactExists(contact.ContactId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(contact);
+        }
 
+   
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var contact = await _context.Contacts
+                .FirstOrDefaultAsync(m => m.ContactId == id);
+            if (contact == null)
+            {
+                return NotFound();
+            }
+
+            return View(contact);
+        }
+
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id) // or Guid id
+        {
+            var contact = await _context.Contacts.FindAsync(id);
+            if (contact == null)
+            {
+                return NotFound();
+            }
+
+            _context.Contacts.Remove(contact);
             await _context.SaveChangesAsync();
 
-           return RedirectToAction("Index");
-
+            return RedirectToAction(nameof(Index)); // Redirect to the list of contacts after deletion
         }
 
-
-        public async Task<IActionResult> delete(int id)
+        private bool ContactExists(int id)
         {
-            var contact = await _context.Manager.FindAsync(id);
-
-            if (contact == null) return NotFound();
-
-            return View(contact);
-
-
+            return _context.Contacts.Any(e => e.ContactId == id);
         }
-
 
         [HttpPost]
-        public async Task<IActionResult> deleteConfirmed (int id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Upsert([Bind("ContactId,FirstName,LastName,PhoneNumber,Email,CategoryId,Organization")] Contact contact)
         {
-            var contact = await _context.Manager.FindAsync(id);
-            if (contact == null) return NotFound(); 
+            if (ModelState.IsValid)
+            {
+                if (contact.ContactId == 0)
+                {
+                    // Create new contact
+                    _context.Add(contact);
+                }
+                else
+                {
+                    // Update existing contact
+                    _context.Update(contact);
+                }
 
-            _context.Manager.Remove(contact);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
 
-
-
+            return View(contact);
         }
-
-
-
 
 
 
