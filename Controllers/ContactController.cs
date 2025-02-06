@@ -21,7 +21,9 @@ namespace assignment1C_.Controllers
         {
             var contacts = await _context.Contacts.ToListAsync();
 
-            
+
+            Console.WriteLine($"Contacts Count: {contacts.Count}"); // Debugging
+
 
             return View(contacts);
         }
