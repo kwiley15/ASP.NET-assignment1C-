@@ -1,4 +1,4 @@
-﻿@model Manager.Models.Contact
+﻿@model assignment1C_.Models.Manager
 @{
     ViewBag.Title = Model.ContactId == 0 ? "Add Contact" : "Edit Contact";
 }
@@ -8,11 +8,11 @@
 <form asp-action="Upsert" method="post">
     <input type="hidden" asp-for="ContactId" />
     <div class="form-group">
-        <label asp-for="fristName">Frist Name</label>
+        <label asp-for="FirstName">Frist Name</label>
         <input asp-for="FirstName" class="form-control" />
     </div>
     <div class="form-group">
-        <label asp-for="lasName"> Last Name</label>
+        <label asp-for="LastName"> Last Name</label>
         <input asp-for="LastName" class="form-control" />
     </div>
     <div class="form-group">
