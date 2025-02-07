@@ -22,7 +22,6 @@ namespace assignment1C_.Controllers
             var contacts = _context.Contacts.ToList();
             return View(contacts);
         }
-
 		public IActionResult Privacy()
         {
             return View();

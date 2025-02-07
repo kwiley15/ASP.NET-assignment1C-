@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<assignment1C_.Models.Contact>
 
 <h1>Contacts</h1>
-<a class="btn btn-primary" asp-action="CreateContact">Add Contact</a>
+<a class="btn btn-primary" asp-controller="Contact" asp-action="Add">Add Contact</a>
 @if (Model == null || !Model.Any())
 {
     <p>No contacts available.</p>
@@ -23,15 +23,15 @@ else
         @foreach (var contact in Model)
         {
             <tr>
-                <td><a asp-action="Details" asp-route-id="@contact.ContactId">@contact.FirstName</a></td>
-                <td>@contact.LastName ?? "N/A"</td>
-                <td>@contact.PhoneNumber?? "N/A"</td>
+                 <td><a asp-controller="Contact" asp-action="ContactDetails" asp-route-id="@contact.ContactId">@contact.FirstName</a></td>
+                <td>@contact.LastName </td>
+                <td>@contact.PhoneNumber </td>
                 <td>@contact.Email</td>
                 <td>@contact.CategoryId</td>
                 
                 <td>
-                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@contact.ContactId">Edit</a>
-                    <a class="btn btn-danger" asp-action="DeleteContact" asp-route-id="@contact.ContactId">Delete</a>
+                        <a class="btn btn-warning" asp-controller="Contact" asp-action="Edit" asp-route-id="@contact.ContactId">Edit</a>
+                        <a class="btn btn-danger" asp-controller="Contact" asp-action="DeleteContact" asp-route-id="@contact.ContactId">Delete</a>
                 </td>
             </tr>
         }

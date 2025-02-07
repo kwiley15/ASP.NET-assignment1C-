@@ -28,8 +28,23 @@ namespace assignment1C_.Controllers
             return View(contacts);
         }
 
-        
-        public async Task<IActionResult> Details(int? id)
+		public IActionResult ContactDetails(int id)
+		{
+			// Fetch the contact with the specified ID from the database
+			var contact = _context.Contacts.FirstOrDefault(c => c.ContactId == id);
+
+			if (contact == null)
+			{
+				return NotFound(); // Return a 404 error if the contact is not found
+			}
+
+			return View(contact); // Pass the contact to the view
+		}
+		public IActionResult Add()
+		{
+			return View("Edit", new Contact());
+		}
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -47,7 +62,7 @@ namespace assignment1C_.Controllers
         }
 
       
-        public IActionResult Create()
+        public IActionResult CreateContact()
         {
             return View();
         }
@@ -116,7 +131,7 @@ namespace assignment1C_.Controllers
         }
 
    
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> DeleteContact(int? id)
         {
             if (id == null)
             {
