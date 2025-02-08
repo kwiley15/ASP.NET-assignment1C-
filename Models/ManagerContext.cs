@@ -19,7 +19,8 @@ namespace assignment1C_.Models
 					PhoneNumber = "1234567890",
 					Email = "juangg@gmail.com",
 					CategoryId = 1,
-					Organization = "RDP"
+					Organization = "RDP",
+					DateAdded = new DateTime(2023, 10, 14)
 				},
 				new Contact
 				{
@@ -29,7 +30,8 @@ namespace assignment1C_.Models
 					PhoneNumber = "1234567890",
 					Email = "elara.starseeker@stellarnet.com ",
 					CategoryId = 2,
-					Organization = "Stellar Explorations"
+					Organization = "Stellar Explorations",
+					DateAdded = new DateTime(2023, 10, 14)
 				},
 				new Contact
 				{
@@ -39,7 +41,8 @@ namespace assignment1C_.Models
 					PhoneNumber = "7788990011",
 					Email = "cassia.moonshade@lunarchive.us ",
 					CategoryId = 5,
-					Organization = "Celestial Archives"
+					Organization = "Celestial Archives",
+					DateAdded = new DateTime(2023, 10, 14)
 				},
 				new Contact
 				{
@@ -49,7 +52,9 @@ namespace assignment1C_.Models
 					PhoneNumber = "9988776655",
 					Email = "thorne.blackthorn@shadowcraft.io ",
 					CategoryId = 4,
-					Organization = "Shadowbound Guild"
+					Organization = "Shadowbound Guild",
+					DateAdded = new DateTime(2023, 10, 14)
+
 				},
 				new Contact
 				{
@@ -59,7 +64,8 @@ namespace assignment1C_.Models
 					PhoneNumber = "1122334455",
 					Email = "mira.luminaris@lightweave.org ",
 					CategoryId = 3,
-					Organization = "Weavers of Dawn"
+					Organization = "Weavers of Dawn",
+					DateAdded = new DateTime(2023, 10, 14)
 				}
 			);
 		}

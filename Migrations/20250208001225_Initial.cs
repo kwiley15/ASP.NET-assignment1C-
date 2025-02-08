@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -24,7 +25,7 @@ namespace assignment1C_.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     Organization = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Category = table.Column<int>(type: "int", nullable: false)
+                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -33,14 +34,14 @@ namespace assignment1C_.Migrations
 
             migrationBuilder.InsertData(
                 table: "Contacts",
-                columns: new[] { "ContactId", "Category", "CategoryId", "Email", "FirstName", "LastName", "Organization", "PhoneNumber" },
+                columns: new[] { "ContactId", "CategoryId", "DateAdded", "Email", "FirstName", "LastName", "Organization", "PhoneNumber" },
                 values: new object[,]
                 {
-                    { 1, 0, 1, "juangg@gmail.com", "Juan", "Guerro", "RDP", "1234567890" },
-                    { 2, 0, 2, "elara.starseeker@stellarnet.com ", "Elara", "Starseeker", "Stellar Explorations", "1234567890" },
-                    { 3, 0, 5, "cassia.moonshade@lunarchive.us ", "Cassia", "Moonshade", "Celestial Archives", "7788990011" },
-                    { 4, 0, 4, "thorne.blackthorn@shadowcraft.io ", "Thorne", "Blackthorn", "Shadowbound Guild", "9988776655" },
-                    { 5, 0, 3, "mira.luminaris@lightweave.org ", "Mira", "Luminaris", "Weavers of Dawn", "1122334455" }
+                    { 1, 1, new DateTime(2023, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "juangg@gmail.com", "Juan", "Guerro", "RDP", "1234567890" },
+                    { 2, 2, new DateTime(2023, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "elara.starseeker@stellarnet.com ", "Elara", "Starseeker", "Stellar Explorations", "1234567890" },
+                    { 3, 5, new DateTime(2023, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "cassia.moonshade@lunarchive.us ", "Cassia", "Moonshade", "Celestial Archives", "7788990011" },
+                    { 4, 4, new DateTime(2023, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "thorne.blackthorn@shadowcraft.io ", "Thorne", "Blackthorn", "Shadowbound Guild", "9988776655" },
+                    { 5, 3, new DateTime(2023, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "mira.luminaris@lightweave.org ", "Mira", "Luminaris", "Weavers of Dawn", "1122334455" }
                 });
         }
 

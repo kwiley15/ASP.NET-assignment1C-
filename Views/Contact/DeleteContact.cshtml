@@ -1,12 +1,10 @@
 ﻿@model assignment1C_.Models.Contact
 
 <h1>Delete Contact</h1>
-
 <div>
     <p>Are you sure you want to delete the contact <strong>@Model.FirstName @Model.LastName</strong>?</p>
 </div>
-
-<form asp-action="Delete" method="post">
+<form asp-action="DeleteContact" method="post">
     <input type="hidden" asp-for="ContactId" />
     <button type="submit" class="btn btn-danger">Yes, Delete</button>
     <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Cancel</a>

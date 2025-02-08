@@ -100,72 +100,77 @@ namespace assignment1C_.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ContactId,FirstName,LastName,PhoneNumber,Email,CategoryId,Organization")] Contact contact)
-        {
-            if (id != contact.ContactId)
-            {
-                return NotFound();
-            }
+		public async Task<IActionResult> Edit(int id, [Bind("ContactId,FirstName,LastName,PhoneNumber,Email,CategoryId,Organization")] Contact contact)
+		{
+			if (id != contact.ContactId)
+			{
+				return NotFound();
+			}
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(contact);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ContactExists(contact.ContactId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(contact);
-        }
+			if (!ModelState.IsValid)
+			{
+				// Log validation errors for debugging
+				foreach (var key in ModelState.Keys)
+				{
+					var errors = ModelState[key].Errors;
+					foreach (var error in errors)
+					{
+						Console.WriteLine($"Key: {key}, Error: {error.ErrorMessage}");
+					}
+				}
+				return View(contact); // Return to the form with errors
+			}
 
-   
-        public async Task<IActionResult> DeleteContact(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+			try
+			{
+				// Set DateAdded to the current date and time
+				contact.DateAdded = DateTime.Now;
 
-            var contact = await _context.Contacts
-                .FirstOrDefaultAsync(m => m.ContactId == id);
-            if (contact == null)
-            {
-                return NotFound();
-            }
+				// Update the contact in the database
+				_context.Update(contact);
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException)
+			{
+				if (!ContactExists(contact.ContactId))
+				{
+					return NotFound();
+				}
+				else
+				{
+					throw; // Consider logging or handling this more gracefully
+				}
+			}
 
-            return View(contact);
-        }
+			return RedirectToAction("Index", "Home"); // Redirects to /Home/Index
+		}
 
 
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id) // or Guid id
-        {
-            var contact = await _context.Contacts.FindAsync(id);
-            if (contact == null)
-            {
-                return NotFound();
-            }
+		public IActionResult DeleteContact(int id)
+		{
+			var contact = _context.Contacts.Find(id);
+			if (contact == null)
+			{
+				return NotFound();
+			}
+			return View(contact);
+		}
 
-            _context.Contacts.Remove(contact);
-            await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index)); // Redirect to the list of contacts after deletion
-        }
+		[HttpPost, ActionName("DeleteContact")]
+		[ValidateAntiForgeryToken]
+		public IActionResult DeleteContactConfirmed(int id)
+		{
+			var contact = _context.Contacts.Find(id);
+			if (contact != null)
+			{
+				_context.Contacts.Remove(contact);
+				_context.SaveChanges();
+			}
+			return RedirectToAction("Index", "Home"); // Redirects to /Home/Index
+		}
 
-        private bool ContactExists(int id)
+		private bool ContactExists(int id)
         {
             return _context.Contacts.Any(e => e.ContactId == id);
         }

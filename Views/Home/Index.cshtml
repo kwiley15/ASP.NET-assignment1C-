@@ -8,26 +8,50 @@
 }
 else
 {
-<table class="table table-bordered mt-3">
-    <thead>
-        <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Phone</th>
-            <th>Email</th>
-            <th>Category</th>
-           
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var contact in Model)
-        {
+    <table class="table table-bordered mt-3">
+        <thead>
             <tr>
-                 <td><a asp-controller="Contact" asp-action="ContactDetails" asp-route-id="@contact.ContactId">@contact.FirstName</a></td>
-                <td>@contact.LastName </td>
-                <td>@contact.PhoneNumber </td>
-                <td>@contact.Email</td>
-                <td>@contact.CategoryId</td>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Category</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var contact in Model)
+            {
+                <tr>
+                    <td><a asp-controller="Contact" asp-action="ContactDetails" asp-route-id="@contact.ContactId">@contact.FirstName</a></td>
+                    <td>@contact.LastName </td>
+                    <td>@contact.PhoneNumber </td>
+                    <td>@contact.Email</td>
+                    <td>@{
+                            switch (@contact.CategoryId)
+                            {
+                                case 1:
+                                    <text>Assistant</text>
+                                    ;
+                                    break;
+                                case 2:
+                                    <text>Employee</text>
+                                    break;
+                                case 3:
+                                    <text>Manager</text>
+                                    break;
+                                case 4:
+                                    <text>Friend</text>
+                                    break;
+                                case 5:
+                                    <text>Family</text>
+                                    break;
+                                case 6:
+                                    <text>Other</text>
+                                    break; 
+                            }
+                    }
+                    </td>
                 
                 <td>
                         <a class="btn btn-warning" asp-controller="Contact" asp-action="Edit" asp-route-id="@contact.ContactId">Edit</a>

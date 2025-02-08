@@ -20,5 +20,8 @@
 <div>
     <strong>Organization:</strong> @Model.Organization
 </div>
+<div><strong>Date Added:</strong>@Model.DateAdded</div>
 
 <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Back to List</a>
+<a class="btn btn-warning" asp-controller="Contact" asp-action="Edit" asp-route-id="@Model.ContactId">Edit</a>
+<a class="btn btn-danger" asp-controller="Contact" asp-action="DeleteContact" asp-route-id="@Model.ContactId">Delete</a>
