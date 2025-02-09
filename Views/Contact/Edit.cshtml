@@ -60,8 +60,7 @@
 
     <!-- Slug (Hidden) -->
     <input asp-for="Slug" id="Slug" name="Slug" readonly hidden />
-    <!-- Hidden input for the Slug, dynamically updated via JavaScript -->
-
+    s
     <div>
         <button type="submit" class="btn btn-success">Save</button>
         <!-- Save button styled with Bootstrap -->
@@ -77,29 +76,3 @@
         }
     </div>
 </form>
-<!-- JavaScript in order to dynamically generate the slug based on the first and last name of the contact: -->
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const firstNameInput = document.querySelector("#FirstName");
-        const lastNameInput = document.querySelector("#LastName");
-        const slugInput = document.querySelector("#Slug");
-
-        // Function to generate the slug
-        function generateSlug() {
-            const firstName = firstNameInput.value.trim().toLowerCase() || "unknown";
-            const lastName = lastNameInput.value.trim().toLowerCase() || "unknown";
-            const contactId = @Model.ContactId;
-
-            // Generate the slug format
-            const slug = `${contactId}/${firstName}-${lastName}/`;
-            slugInput.value = slug;
-        }
-
-        // Listen for input changes on FirstName and LastName
-        firstNameInput.addEventListener("input", generateSlug);
-        lastNameInput.addEventListener("input", generateSlug);
-
-        // Trigger the function on page load to set the initial value
-        generateSlug();
-    });
-</script>

@@ -72,7 +72,8 @@ namespace assignment1C_.Controllers
 			{
 				ContactId = 0,
 				FirstName = string.Empty,
-				LastName = string.Empty
+				LastName = string.Empty,
+				Slug = "temp-slug"
 			};
 
 			// Populate ViewBag with the dropdown list of categories.
@@ -118,19 +119,19 @@ namespace assignment1C_.Controllers
 
 		// POST action to handle form submission for adding or updating a contact.
 		[HttpPost]
-		[ValidateAntiForgeryToken] // Protect against cross-site request forgery (CSRF).
+		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int id, [Bind("ContactId,FirstName,LastName,PhoneNumber,Email,CategoryId,Organization,Slug")] Contact contact)
 		{
-			// Ensure the provided ID matches the contact's ID.
-			if (id != contact.ContactId)
+			// Ensure the provided ID matches the contact's ID
+			if (id != contact.ContactId && contact.ContactId != 0) // Allow ContactId = 0 for new records
 			{
 				return NotFound();
 			}
 
-			// If the model state is invalid, log validation errors and return to the form.
+			// Validate the model state
 			if (!ModelState.IsValid)
 			{
-				// Log validation errors for debugging purposes.
+				// Log validation errors for debugging
 				foreach (var key in ModelState.Keys)
 				{
 					var errors = ModelState[key].Errors;
@@ -140,44 +141,71 @@ namespace assignment1C_.Controllers
 					}
 				}
 
-				// Generate a slug for the contact.
-				contact.Slug = GenerateSlug(contact);
-
-				// Repopulate the dropdown list of categories.
+				// Repopulate the dropdown list of categories
 				var categories = await _context.Categories.ToListAsync();
 				ViewBag.Categories = new SelectList(categories, "CategoryId", "CategoryName", contact.CategoryId);
 
-				// Return to the form with the invalid contact object.
-				return View(contact);
+				return View(contact); // Return to the form with errors
 			}
 
 			try
 			{
-				// Set the DateAdded field for new records.
+				// Set DateAdded to the current date and time for new records
 				if (contact.DateAdded == default)
 				{
 					contact.DateAdded = DateTime.Now;
 				}
 
-				// Update the contact in the database.
-				_context.Update(contact);
-				await _context.SaveChangesAsync();
+				// Check if this is a new contact (ContactId == 0)
+				if (contact.ContactId == 0)
+				{
+					// Add the new contact to the database
+					_context.Add(contact);
+					await _context.SaveChangesAsync();
+
+					// Retrieve the newly assigned ContactId
+					int newContactId = contact.ContactId;
+
+					// Generate the Slug using the new ContactId
+					contact.Slug = GenerateSlug(contact);
+
+					// Update the contact with the new Slug
+					_context.Update(contact);
+					await _context.SaveChangesAsync();
+				}
+				else
+				{
+					// For existing contacts, generate the Slug using the existing ContactId
+					contact.Slug = GenerateSlug(contact);
+
+					// Update the contact in the database
+					_context.Update(contact);
+					await _context.SaveChangesAsync();
+				}
 			}
 			catch (DbUpdateConcurrencyException)
 			{
-				// Handle concurrency exceptions by checking if the contact still exists.
+				// Handle concurrency exceptions by checking if the contact still exists
 				if (!ContactExists(contact.ContactId))
 				{
 					return NotFound();
 				}
 				else
 				{
-					throw; // Re-throw the exception if the contact exists but there's another issue.
+					throw; // Re-throw the exception if the contact exists but there's another issue
 				}
 			}
 
-			// Redirect to the home page after successful update.
+			// Redirect to the home page after successful update
 			return RedirectToAction("Index", "Home");
+		}
+
+		// Helper method to generate a slug
+		private string GenerateSlug(Contact contact)
+		{
+			string firstNamePart = string.IsNullOrWhiteSpace(contact.FirstName) ? "unknown" : contact.FirstName.Trim().ToLower();
+			string lastNamePart = string.IsNullOrWhiteSpace(contact.LastName) ? "unknown" : contact.LastName.Trim().ToLower();
+			return $"{contact.ContactId}/{firstNamePart}-{lastNamePart}/";
 		}
 
 		// Action to display the confirmation page for deleting a contact.
@@ -219,15 +247,6 @@ namespace assignment1C_.Controllers
 		private bool ContactExists(int id)
 		{
 			return _context.Contacts.Any(e => e.ContactId == id);
-		}
-
-		// Helper method to generate a slug for a contact.
-		private string GenerateSlug(Contact contact)
-		{
-			// Generate a slug that includes the ContactId, first name, and last name.
-			string firstNamePart = string.IsNullOrWhiteSpace(contact.FirstName) ? "unknown" : contact.FirstName.Trim().ToLower();
-			string lastNamePart = string.IsNullOrWhiteSpace(contact.LastName) ? "unknown" : contact.LastName.Trim().ToLower();
-			return $"{contact.ContactId}/{firstNamePart}-{lastNamePart}/";
 		}
 
 		// POST action to handle upsert (create or update) operations for a contact.
