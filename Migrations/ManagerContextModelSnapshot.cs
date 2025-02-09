@@ -22,6 +22,55 @@ namespace assignment1C_.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("assignment1C_.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = 1,
+                            CategoryName = "Assistant"
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            CategoryName = "Employee"
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            CategoryName = "Manager"
+                        },
+                        new
+                        {
+                            CategoryId = 4,
+                            CategoryName = "Friend"
+                        },
+                        new
+                        {
+                            CategoryId = 5,
+                            CategoryName = "Family"
+                        },
+                        new
+                        {
+                            CategoryId = 6,
+                            CategoryName = "Other"
+                        });
+                });
+
             modelBuilder.Entity("assignment1C_.Models.Contact", b =>
                 {
                     b.Property<int>("ContactId")
@@ -55,7 +104,13 @@ namespace assignment1C_.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("ContactId");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Contacts");
 
@@ -69,52 +124,73 @@ namespace assignment1C_.Migrations
                             FirstName = "Juan",
                             LastName = "Guerro",
                             Organization = "RDP",
-                            PhoneNumber = "1234567890"
+                            PhoneNumber = "1234567890",
+                            Slug = "1/juan-guerro/"
                         },
                         new
                         {
                             ContactId = 2,
                             CategoryId = 2,
                             DateAdded = new DateTime(2023, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "elara.starseeker@stellarnet.com ",
+                            Email = "elara.starseeker@stellarnet.com",
                             FirstName = "Elara",
                             LastName = "Starseeker",
                             Organization = "Stellar Explorations",
-                            PhoneNumber = "1234567890"
+                            PhoneNumber = "1234567890",
+                            Slug = "2/elara-starseeker/"
                         },
                         new
                         {
                             ContactId = 3,
                             CategoryId = 5,
                             DateAdded = new DateTime(2023, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "cassia.moonshade@lunarchive.us ",
+                            Email = "cassia.moonshade@lunarchive.us",
                             FirstName = "Cassia",
                             LastName = "Moonshade",
                             Organization = "Celestial Archives",
-                            PhoneNumber = "7788990011"
+                            PhoneNumber = "7788990011",
+                            Slug = "3/cassia-moonshade/"
                         },
                         new
                         {
                             ContactId = 4,
                             CategoryId = 4,
                             DateAdded = new DateTime(2023, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "thorne.blackthorn@shadowcraft.io ",
+                            Email = "thorne.blackthorn@shadowcraft.io",
                             FirstName = "Thorne",
                             LastName = "Blackthorn",
                             Organization = "Shadowbound Guild",
-                            PhoneNumber = "9988776655"
+                            PhoneNumber = "9988776655",
+                            Slug = "4/thorne-blackthorn/"
                         },
                         new
                         {
                             ContactId = 5,
                             CategoryId = 3,
                             DateAdded = new DateTime(2023, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "mira.luminaris@lightweave.org ",
+                            Email = "mira.luminaris@lightweave.org",
                             FirstName = "Mira",
                             LastName = "Luminaris",
                             Organization = "Weavers of Dawn",
-                            PhoneNumber = "1122334455"
+                            PhoneNumber = "1122334455",
+                            Slug = "5/mira-luminaris/"
                         });
+                });
+
+            modelBuilder.Entity("assignment1C_.Models.Contact", b =>
+                {
+                    b.HasOne("assignment1C_.Models.Category", "Category")
+                        .WithMany("Contacts")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("assignment1C_.Models.Category", b =>
+                {
+                    b.Navigation("Contacts");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,50 +1,105 @@
 ﻿@model assignment1C_.Models.Contact
 
-<h1>Edit Contact</h1>
+<h1 class="mb-4">Edit Contact</h1>
 
-<form asp-action="Edit" method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
+<!-- Form for editing contact details -->
+<form asp-action="Edit" method="post" class="needs-validation" novalidate>
+    <!-- Validation Summary -->
+    <div asp-validation-summary="All" class="text-danger mb-3">
+        <!-- Displays all validation errors in a summary -->
+    </div>
 
+    <!-- Hidden Input for ContactId -->
     <input type="hidden" asp-for="ContactId" />
+    <!-- Ensures the ContactId is passed back to the server during form submission -->
+    <!-- First Name -->
+    <div class="mb-3">
+        <label asp-for="FirstName" class="form-label">First Name</label>
+        <input id="FirstName" asp-for="FirstName" class="form-control" required />
+        <!-- Required attribute ensures this field cannot be empty -->
+        <span asp-validation-for="FirstName" class="text-danger small"></span>
+        <!-- Displays validation error messages below the input -->
+    </div>
 
-    <div class="form-group">
-        <label asp-for="FirstName">First Name</label>
-        <input asp-for="FirstName" class="form-control" />
-        <span asp-validation-for="FirstName" class="text-danger"></span>
+    <!-- Last Name -->
+    <div class="mb-3">
+        <label asp-for="LastName" class="form-label">Last Name</label>
+        <input id="LastName" asp-for="LastName" class="form-control" required />
+        <span asp-validation-for="LastName" class="text-danger small"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="LastName">Last Name</label>
-        <input asp-for="LastName" class="form-control" />
-        <span asp-validation-for="LastName" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="PhoneNumber">Phone Number</label>
+
+    <!-- Phone Number -->
+    <div class="mb-3">
+        <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
         <input asp-for="PhoneNumber" class="form-control" />
-        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="Email">Email</label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
+    <!-- Email -->
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" type="email" />
+        <!-- type="email" ensures proper email format validation -->
+        <span asp-validation-for="Email" class="text-danger small"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="CategoryId">Category</label>
-        <select asp-for="CategoryId" class="form-control">
-            <option value="1">Assistant</option>
-            <option value="2">Employee</option>
-            <option value="3">Manager</option>
-            <option value="4">Friend</option>
-            <option value="5">Family</option>
-            <option value="6">Other</option>
+
+    <!-- Category -->
+    <div class="mb-3">
+        <label asp-for="CategoryId" class="form-label">Category</label>
+        <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.Categories" required>
+            <option value="">Select a Category</option>
+            <!-- Placeholder option to prompt user selection -->
         </select>
-        <span asp-validation-for="CategoryId" class="text-danger"></span>
+        <span asp-validation-for="CategoryId" class="text-danger small"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="Organization">Organization</label>
+
+    <!-- Organization -->
+    <div class="mb-3">
+        <label asp-for="Organization" class="form-label">Organization</label>
         <input asp-for="Organization" class="form-control" />
     </div>
-    <div class="form-group">
+
+    <!-- Slug (Hidden) -->
+    <input asp-for="Slug" id="Slug" name="Slug" readonly hidden />
+    <!-- Hidden input for the Slug, dynamically updated via JavaScript -->
+
+    <div>
         <button type="submit" class="btn btn-success">Save</button>
-        <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Cancel</a>
+        <!-- Save button styled with Bootstrap -->
+        @if (Model.ContactId == 0)
+        {
+            <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Cancel</a>
+                @* <!-- Cancel button for new contacts --> *@
+        }
+        else
+        {
+               <a class="btn btn-secondary" asp-controller="Contact" asp-action="ContactDetails" asp-route-id="@Model.ContactId">Cancel</a>
+                @* <!-- Cancel button for existing contacts --> *@
+        }
     </div>
 </form>
+<!-- JavaScript in order to dynamically generate the slug based on the first and last name of the contact: -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const firstNameInput = document.querySelector("#FirstName");
+        const lastNameInput = document.querySelector("#LastName");
+        const slugInput = document.querySelector("#Slug");
+
+        // Function to generate the slug
+        function generateSlug() {
+            const firstName = firstNameInput.value.trim().toLowerCase() || "unknown";
+            const lastName = lastNameInput.value.trim().toLowerCase() || "unknown";
+            const contactId = @Model.ContactId;
+
+            // Generate the slug format
+            const slug = `${contactId}/${firstName}-${lastName}/`;
+            slugInput.value = slug;
+        }
+
+        // Listen for input changes on FirstName and LastName
+        firstNameInput.addEventListener("input", generateSlug);
+        lastNameInput.addEventListener("input", generateSlug);
+
+        // Trigger the function on page load to set the initial value
+        generateSlug();
+    });
+</script>

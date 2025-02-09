@@ -1,27 +1,95 @@
 ﻿@model assignment1C_.Models.Contact
 
-<h1>Contact Details</h1>
+<!-- Title for the page -->
+<h1 class="mb-4">Contact Details</h1>
 
-<div>
-    <strong>First Name:</strong> @Model.FirstName
-</div>
-<div>
-    <strong>Last Name:</strong> @Model.LastName
-</div>
-<div>
-    <strong>Phone Number:</strong> @Model.PhoneNumber
-</div>
-<div>
-    <strong>Email:</strong> @Model.Email
-</div>
-<div>
-    <strong>Category Id:</strong> @Model.CategoryId
-</div>
-<div>
-    <strong>Organization:</strong> @Model.Organization
-</div>
-<div><strong>Date Added:</strong>@Model.DateAdded</div>
+<!-- Card layout to display contact details -->
+<div class="card shadow-sm">
+    <div class="card-body">
+        <!-- First Name -->
+        <div class="row mb-3">
+            <div class="col-sm-3 text-muted"><strong>First Name:</strong></div>
+            <div class="col-sm-9">@Model.FirstName</div>
+        </div>
 
-<a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Back to List</a>
-<a class="btn btn-warning" asp-controller="Contact" asp-action="Edit" asp-route-id="@Model.ContactId">Edit</a>
-<a class="btn btn-danger" asp-controller="Contact" asp-action="DeleteContact" asp-route-id="@Model.ContactId">Delete</a>
+        <!-- Last Name -->
+        <div class="row mb-3">
+            <div class="col-sm-3 text-muted"><strong>Last Name:</strong></div>
+            <div class="col-sm-9">@Model.LastName</div>
+        </div>
+
+        <!-- Phone Number -->
+        <div class="row mb-3">
+            <div class="col-sm-3 text-muted"><strong>Phone Number:</strong></div>
+            <div class="col-sm-9">@Model.PhoneNumber</div>
+        </div>
+
+        <!-- Email -->
+        <div class="row mb-3">
+            <div class="col-sm-3 text-muted"><strong>Email:</strong></div>
+            <div class="col-sm-9">
+                <!-- Make the email clickable -->
+                <a href="mailto:@Model.Email" class="text-decoration-none">@Model.Email</a>
+            </div>
+        </div>
+
+        <!-- Category -->
+        <div class="row mb-3">
+            <div class="col-sm-3 text-muted"><strong>Category:</strong></div>
+            <div class="col-sm-9">
+                @{
+                    // Map the CategoryId to a human-readable category name
+                    string category = Model.CategoryId switch
+                    {
+                        1 => "Assistant",
+                        2 => "Employee",
+                        3 => "Manager",
+                        4 => "Friend",
+                        5 => "Family",
+                        6 => "Other",
+                        _ => "Unknown"
+                    };
+                }
+                @category <!-- Display the category name -->
+            </div>
+        </div>
+
+        <!-- Organization -->
+        <div class="row mb-3">
+            <div class="col-sm-3 text-muted"><strong>Organization:</strong></div>
+            <div class="col-sm-9">@Model.Organization</div>
+        </div>
+
+        <!-- Date Added -->
+        <div class="row mb-3">
+            <div class="col-sm-3 text-muted"><strong>Date Added:</strong></div>
+            <div class="col-sm-9">
+                <!-- Format the date in a user-friendly way -->
+                @Model.DateAdded.ToString("MMMM dd, yyyy")
+            </div>
+        </div>
+
+        <!-- Shareable Link -->
+        <div class="row mb-3">
+            <div class="col-sm-3 text-muted"><strong>Shareable Link:</strong></div>
+            <div class="col-sm-9">
+                <!-- Create a clickable link using the Slug -->
+                <a href="/Contact/ContactDetails/@Model.Slug" class="text-primary text-decoration-none">
+                    Copy this link for a URL with contact name
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Action Buttons -->
+<div class="mt-4 d-flex gap-2">
+    <!-- Back to Contacts button -->
+    <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Back to Contacts</a>
+
+    <!-- Edit Contact button -->
+    <a class="btn btn-warning" asp-controller="Contact" asp-action="Edit" asp-route-id="@Model.ContactId">Edit</a>
+
+    <!-- Delete Contact button -->
+    <a class="btn btn-danger" asp-controller="Contact" asp-action="DeleteContact" asp-route-id="@Model.ContactId">Delete</a>
+</div>

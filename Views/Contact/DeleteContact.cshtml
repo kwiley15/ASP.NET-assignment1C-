@@ -1,11 +1,21 @@
 ﻿@model assignment1C_.Models.Contact
 
-<h1>Delete Contact</h1>
-<div>
-    <p>Are you sure you want to delete the contact <strong>@Model.FirstName @Model.LastName</strong>?</p>
+<h1 class="mb-4">Delete Contact</h1>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <p class="lead">
+            Are you sure you want to delete the contact <strong>@Model.FirstName @Model.LastName</strong>?
+        </p>
+        <form asp-action="DeleteContact" method="post">
+            <!-- Hidden input for ContactId -->
+            <input type="hidden" asp-for="ContactId" />
+
+            <!-- Buttons -->
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
 </div>
-<form asp-action="DeleteContact" method="post">
-    <input type="hidden" asp-for="ContactId" />
-    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-    <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Cancel</a>
-</form>
