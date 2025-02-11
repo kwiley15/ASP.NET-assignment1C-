@@ -42,23 +42,8 @@
 		// Date the contact was added, automatically set when the record is created.
 		public DateTime DateAdded { get; set; }
 
-		// Slug for generating SEO-friendly URLs.
+		// Slug for generating friendly URLs.
 		[ValidateNever] // Skips validation for this property during model binding.
 		public string Slug { get; set; }
-
-		// Private method to generate a slug based on the contact's first name, last name, and ID.
-		public void GenerateSlug()
-		{
-			if (!string.IsNullOrWhiteSpace(FirstName) && !string.IsNullOrWhiteSpace(LastName))
-			{
-				// Generate a slug using the ContactId, FirstName, and LastName.
-				Slug = $"{ContactId}/{FirstName.ToLower().Trim()}-{LastName.ToLower().Trim()}/";
-			}
-			else
-			{
-				// Default slug if FirstName or LastName is missing.
-				Slug = "unknown-contact";
-			}
-		}
 	}
 }
